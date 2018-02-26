@@ -2256,8 +2256,8 @@ var scrape = function () {
 
                           if (tag === 'head') {
                             res.unpipe(parserStream);
-                            parserStream.destroy && parserStream.destroy();
-                            res.destroy && res.destroy();
+                            parserStream.destroy ? parserStream.destroy() : parserStream.end();
+                            res.destroy ? res.destroy() : res.end();
                             parserStream._parser.reset(); // Parse as little as possible.
                           }
                         };
@@ -2334,8 +2334,8 @@ var scrape = function () {
                           if (!(contentType.indexOf('html') !== -1)) {
                             res.unpipe(parserStream);
                             parserStream.destroy && parserStream.destroy();
-                            res.destroy && res.destroy();
-                            parserStream._parser.reset(); // Parse as little as possible.
+                            parserStream.destroy ? parserStream.destroy() : parserStream.end();
+                            res.destroy ? res.destroy() : res.end();
                             lodash$1(pkg, 'other._type', contentType);
                           }
                         });
