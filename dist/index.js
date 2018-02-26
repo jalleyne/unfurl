@@ -2107,7 +2107,7 @@ var unfurl = function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee(url) {
     var init = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    var pkgOpts, fetchOpts, metadata, oembedData, unwind, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _step$value, k, v, camelKey;
+    var pkgOpts, fetchOpts, metadata, oembedData, unwind, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _ref2, _ref3, k, v, camelKey;
 
     return regenerator.wrap(function _callee$(_context) {
       while (1) {
@@ -2131,7 +2131,7 @@ var unfurl = function () {
             metadata = _context.sent;
 
             if (!(pkgOpts.oembed && metadata.oembed)) {
-              _context.next = 39;
+              _context.next = 42;
               break;
             }
 
@@ -2156,72 +2156,75 @@ var unfurl = function () {
 
           case 16:
             if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-              _context.next = 25;
+              _context.next = 28;
               break;
             }
 
-            _step$value = _slicedToArray(_step.value, 2), k = _step$value[0], v = _step$value[1];
+            _ref2 = _step.value;
+            _ref3 = _slicedToArray(_ref2, 2);
+            k = _ref3[0];
+            v = _ref3[1];
             camelKey = lodash$2(k);
 
-            if (oembed.includes(camelKey)) {
-              _context.next = 21;
+            if (oembed.indexOf(camelKey) !== -1) {
+              _context.next = 24;
               break;
             }
 
-            return _context.abrupt('continue', 22);
+            return _context.abrupt('continue', 25);
 
-          case 21:
+          case 24:
 
             metadata.oembed[camelKey] = v;
 
-          case 22:
+          case 25:
             _iteratorNormalCompletion = true;
             _context.next = 16;
             break;
 
-          case 25:
-            _context.next = 31;
+          case 28:
+            _context.next = 34;
             break;
 
-          case 27:
-            _context.prev = 27;
+          case 30:
+            _context.prev = 30;
             _context.t0 = _context['catch'](14);
             _didIteratorError = true;
             _iteratorError = _context.t0;
 
-          case 31:
-            _context.prev = 31;
-            _context.prev = 32;
+          case 34:
+            _context.prev = 34;
+            _context.prev = 35;
 
             if (!_iteratorNormalCompletion && _iterator.return) {
               _iterator.return();
             }
 
-          case 34:
-            _context.prev = 34;
+          case 37:
+            _context.prev = 37;
 
             if (!_didIteratorError) {
-              _context.next = 37;
+              _context.next = 40;
               break;
             }
 
             throw _iteratorError;
 
-          case 37:
+          case 40:
+            return _context.finish(37);
+
+          case 41:
             return _context.finish(34);
 
-          case 38:
-            return _context.finish(31);
-
-          case 39:
+          case 42:
             return _context.abrupt('return', metadata);
 
-          case 40:
+          case 43:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[14, 27, 31, 39], [32,, 34, 38]]);
+    }, _callee, this, [[14, 30, 34, 42], [35,, 37, 41]]);
   }));
 
   return function unfurl(_x2) {
@@ -2230,7 +2233,7 @@ var unfurl = function () {
 }();
 
 var scrape = function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3(url, pkgOpts, fetchOpts) {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee3(url, pkgOpts, fetchOpts) {
     var _this = this;
 
     var pkg;
@@ -2240,7 +2243,7 @@ var scrape = function () {
           case 0:
             pkg = Object.create(null);
             return _context3.abrupt('return', new Promise(function () {
-              var _ref3 = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(resolve, reject) {
+              var _ref5 = _asyncToGenerator( /*#__PURE__*/regenerator.mark(function _callee2(resolve, reject) {
                 var parserStream, res, onopentagname, onerror, ontext, onopentag, onclosetag;
                 return regenerator.wrap(function _callee2$(_context2) {
                   while (1) {
@@ -2276,9 +2279,9 @@ var scrape = function () {
 
                           var target = void 0;
 
-                          if (pkgOpts.ogp && ogp.includes(prop)) {
+                          if (pkgOpts.ogp && ogp.indexOf(prop) !== -1) {
                             target = pkg.ogp || (pkg.ogp = {});
-                          } else if (pkgOpts.twitter && twitter.includes(prop)) {
+                          } else if (pkgOpts.twitter && twitter.indexOf(prop) !== -1) {
                             target = pkg.twitter || (pkg.twitter = {});
                           } else {
                             target = pkg.other || (pkg.other = {});
@@ -2305,11 +2308,11 @@ var scrape = function () {
                         };
 
                         parserStream = new htmlparser2.WritableStream({
-                          onopentag: onopentag,
-                          ontext: ontext,
-                          onclosetag: onclosetag,
-                          onerror: onerror,
-                          onopentagname: onopentagname
+                          onopentag,
+                          ontext,
+                          onclosetag,
+                          onerror,
+                          onopentagname
                         }, { decodeEntities: true });
                         _context2.next = 8;
                         return nodeFetch(url, fetchOpts).then(function (res) {
@@ -2322,13 +2325,13 @@ var scrape = function () {
 
                         res.pipe(parserStream);
 
-                        res.on('response', function (_ref4) {
-                          var headers = _ref4.headers;
+                        res.on('response', function (_ref6) {
+                          var headers = _ref6.headers;
 
                           var contentType = lodash(headers, 'content-type', '');
 
                           // Abort if content type is not text/html or varient
-                          if (!contentType.includes('html')) {
+                          if (!(contentType.indexOf('html') !== -1)) {
                             res.unpipe(parserStream);
                             parserStream.destroy();
                             res.destroy();
@@ -2356,7 +2359,7 @@ var scrape = function () {
               }));
 
               return function (_x6, _x7) {
-                return _ref3.apply(this, arguments);
+                return _ref5.apply(this, arguments);
               };
             }()));
 
@@ -2369,7 +2372,7 @@ var scrape = function () {
   }));
 
   return function scrape(_x3, _x4, _x5) {
-    return _ref2.apply(this, arguments);
+    return _ref4.apply(this, arguments);
   };
 }();
 

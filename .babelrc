@@ -8,10 +8,10 @@
           "node": "4.3"
         }
       }
-    ],
-    "es2015-rollup"
+    ]
   ],
   "plugins": [
+    "array-includes",
     "external-helpers",
     [
       "transform-runtime",

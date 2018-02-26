@@ -1,17 +1,18 @@
 // Rollup plugins
-import babel from "rollup-plugin-babel";
-import json from "rollup-plugin-json";
+import babel from 'rollup-plugin-babel'
+import json from 'rollup-plugin-json'
 // import eslint from 'rollup-plugin-eslint'
-import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
-import pkg from "./package.json";
+import resolve from 'rollup-plugin-node-resolve'
+import commonjs from 'rollup-plugin-commonjs'
+
+import pkg from './package.json'
 
 export default {
-  input: "index.js",
+  input: 'index.js',
   output: {
-    name: "unfurl.js",
-    format: "cjs",
-    file: "dist/index.js"
+    name: 'unfurl.js',
+    format: 'cjs',
+    file: 'dist/index.js'
   },
   external: Object.keys(pkg.dependencies || {}).concat(
     Object.keys(pkg.peerDependencies || {})
@@ -20,10 +21,10 @@ export default {
     resolve({
       jsnext: true,
       browser: false,
-      extensions: [".js", ".json"]
+      extensions: ['.js', '.json']
     }),
     commonjs({
-      exclude: "node_modules"
+      exclude: 'node_modules'
     }),
     // eslint({
     // exclude: ['*.js']
@@ -31,7 +32,7 @@ export default {
     json(),
     babel({
       runtimeHelpers: true,
-      exclude: ["node_modules/**", "*.json"]
+      exclude: ['node_modules/**', '*.json']
     })
   ]
-};
+}
