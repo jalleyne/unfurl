@@ -1,8 +1,19 @@
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(factory());
-}(this, (function () { 'use strict';
+'use strict';
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var lodash = _interopDefault(require('lodash.get'));
+var lodash$1 = _interopDefault(require('lodash.set'));
+var lodash$2 = _interopDefault(require('lodash.camelcase'));
+var nodeFetch = _interopDefault(require('node-fetch'));
+var htmlparser2 = _interopDefault(require('htmlparser2'));
+var debug = _interopDefault(require('debug'));
+
+var ogp = ['og:title', 'og:type', 'og:image', 'og:image:url', 'og:image:secure_url', 'og:image:width', 'og:image:height', 'og:image:type', 'og:url', 'og:audio', 'og:audio:url', 'og:audio:secure_url', 'og:audio:type', 'og:description', 'og:determiner', 'og:locale', 'og:locale:alternate', 'og:site_name', 'og:video', 'og:video:url', 'og:video:secure_url', 'og:video:width', 'og:video:height', 'og:video:type', 'og:video:tag'];
+
+var twitter = ['twitter:url', 'twitter:card', 'twitter:site', 'twitter:site:id', 'twitter:creator', 'twitter:creator:id', 'twitter:title', 'twitter:description', 'twitter:image', 'twitter:image:src', 'twitter:image:height', 'twitter:image:width', 'twitter:image:alt', 'twitter:player', 'twitter:player:width', 'twitter:player:height', 'twitter:player:stream', 'twitter:player:stream:content_type', 'twitter:app:name:iphone', 'twitter:app:id:iphone', 'twitter:app:url:iphone', 'twitter:app:name:ipad', 'twitter:app:id:ipad', 'twitter:app:url:ipad', 'twitter:app:name:googleplay', 'twitter:app:id:googleplay', 'twitter:app:url:googleplay', 'twitter:label1', 'twitter:data1', 'twitter:label2', 'twitter:data2'];
+
+var oembed = ['type', 'version', 'title', 'author_name', 'author_url', 'provider_name', 'provider_url', 'cache_age', 'thumbnail_url', 'thumbnail_width', 'thumbnail_height', 'url', 'html', 'width', 'height'];
 
 var asyncToGenerator = function (fn) {
   return function () {
@@ -82,15 +93,15 @@ var unfurl = function () {
         switch (_context.prev = _context.next) {
           case 0:
             pkgOpts = {
-              ogp: get$1(init, 'ogp', true),
-              twitter: get$1(init, 'twitter', true),
-              oembed: get$1(init, 'oembed', true),
-              other: get$1(init, 'other', true)
+              ogp: lodash(init, 'ogp', true),
+              twitter: lodash(init, 'twitter', true),
+              oembed: lodash(init, 'oembed', true),
+              other: lodash(init, 'other', true)
             };
             fetchOpts = {
-              timeout: get$1(init, 'timeout', 2000),
-              follow: get$1(init, 'follow', 5),
-              compress: get$1(init, 'compress', true)
+              timeout: lodash(init, 'timeout', 2000),
+              follow: lodash(init, 'follow', 5),
+              compress: lodash(init, 'compress', true)
             };
             _context.next = 4;
             return scrape(url, pkgOpts, fetchOpts).then(postProcess);
@@ -104,13 +115,13 @@ var unfurl = function () {
             }
 
             _context.next = 8;
-            return fetch(metadata.oembed, fetchOpts).then(function (res) {
+            return nodeFetch(metadata.oembed, fetchOpts).then(function (res) {
               return res.json();
             });
 
           case 8:
             oembedData = _context.sent;
-            unwind = get$1(oembedData, 'body', oembedData);
+            unwind = lodash(oembedData, 'body', oembedData);
 
             // Even if we don't find valid oembed data we'll return an obj rather than the url string
 
@@ -132,7 +143,7 @@ var unfurl = function () {
             _ref3 = slicedToArray(_ref2, 2);
             k = _ref3[0];
             v = _ref3[1];
-            camelKey = camelCase(k);
+            camelKey = lodash$2(k);
 
             if (oembed.includes(camelKey)) {
               _context.next = 24;
@@ -218,7 +229,7 @@ var scrape = function () {
                     switch (_context2.prev = _context2.next) {
                       case 0:
                         onclosetag = function onclosetag(tag) {
-                          debug('</' + tag + '>');
+                          debug$1('</' + tag + '>');
 
                           this._tagname = '';
 
@@ -236,7 +247,7 @@ var scrape = function () {
 
                           if (!prop) return;
 
-                          debug(prop + '=' + val);
+                          debug$1(prop + '=' + val);
 
                           if (pkgOpts.oembed && attr.type === 'application/json+oembed') {
                             pkg.oembed = attr.href;
@@ -260,17 +271,17 @@ var scrape = function () {
 
                         ontext = function ontext(text) {
                           if (this._tagname === 'title' && pkgOpts.other) {
-                            set$1(pkg, 'other.title', get$1(pkg, 'other.title', '') + text);
+                            lodash$1(pkg, 'other.title', lodash(pkg, 'other.title', '') + text);
                           }
                         };
 
                         onerror = function onerror(err) {
-                          debug('error', err);
+                          debug$1('error', err);
                           reject(err);
                         };
 
                         onopentagname = function onopentagname(tag) {
-                          debug('<' + tag + '>');
+                          debug$1('<' + tag + '>');
 
                           this._tagname = tag;
                         };
@@ -283,7 +294,7 @@ var scrape = function () {
                           onopentagname: onopentagname
                         }, { decodeEntities: true });
                         _context2.next = 8;
-                        return fetch(url, fetchOpts).then(function (res) {
+                        return nodeFetch(url, fetchOpts).then(function (res) {
                           return res.body;
                         });
 
@@ -296,7 +307,7 @@ var scrape = function () {
                         res.on('response', function (_ref6) {
                           var headers = _ref6.headers;
 
-                          var contentType = get$1(headers, 'content-type', '');
+                          var contentType = lodash(headers, 'content-type', '');
 
                           // Abort if content type is not text/html or varient
                           if (!contentType.includes('html')) {
@@ -304,17 +315,17 @@ var scrape = function () {
                             parserStream.destroy();
                             res.destroy();
                             parserStream._parser.reset(); // Parse as little as possible.
-                            set$1(pkg, 'other._type', contentType);
+                            lodash$1(pkg, 'other._type', contentType);
                           }
                         });
 
                         res.on('end', function () {
-                          debug('parsed');
+                          debug$1('parsed');
                           resolve(pkg);
                         });
 
                         res.on('error', function (err) {
-                          debug('parse error', err.message);
+                          debug$1('parse error', err.message);
                           reject(err);
                         });
 
@@ -344,18 +355,7 @@ var scrape = function () {
   };
 }();
 
-var get$1 = require('lodash.get');
-var set$1 = require('lodash.set');
-var camelCase = require('lodash.camelcase');
-
-var fetch = require('node-fetch');
-var htmlparser2 = require('htmlparser2');
-
-var ogp = require('./lib/ogp');
-var twitter = require('./lib/twitter');
-var oembed = require('./lib/oembed');
-
-var debug = require('debug')('unfurl');
+var debug$1 = debug('unfurl');
 
 var shouldRollup = ['og:image', 'twitter:image', 'twitter:player', 'og:video', 'og:audio'];
 
@@ -368,8 +368,8 @@ function rollup(target, name, val) {
 
   if (rollupAs) {
     var namePart = name.slice(rollupAs.length);
-    var _prop = !namePart ? 'url' : camelCase(namePart);
-    rollupAs = camelCase(rollupAs);
+    var _prop = !namePart ? 'url' : lodash$2(namePart);
+    rollupAs = lodash$2(rollupAs);
 
     target = target[rollupAs] || (target[rollupAs] = [{}]);
 
@@ -380,12 +380,11 @@ function rollup(target, name, val) {
     return;
   }
 
-  var prop = camelCase(name);
+  var prop = lodash$2(name);
   target[prop] = val;
 }
 
 function postProcess(obj) {
-
   var keys = ['ogp.ogImage', 'twitter.twitterImage', 'twitter.twitterPlayer', 'ogp.ogVideo'];
 
   var _iteratorNormalCompletion2 = true;
@@ -396,14 +395,14 @@ function postProcess(obj) {
     for (var _iterator2 = keys[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
       var key = _step2.value;
 
-      var val = get$1(obj, key);
+      var val = lodash(obj, key);
       if (!val) continue;
 
       val = val.sort(function (a, b) {
         return a.width - b.width;
       }); // asc sort
 
-      set$1(obj, key, val);
+      lodash$1(obj, key, val);
     }
   } catch (err) {
     _didIteratorError2 = true;
@@ -423,6 +422,6 @@ function postProcess(obj) {
   return obj;
 }
 
-module.exports = unfurl;
+var unfurl_1 = unfurl;
 
-})));
+module.exports = unfurl_1;

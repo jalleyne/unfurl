@@ -33,13 +33,12 @@ async function unfurl (url, init = {}) {
     compress: get(init, 'compress', true)
   }
 
-  let metadata = await scrape(url, pkgOpts, fetchOpts)
-    .then(postProcess)
+  let metadata = await scrape(url, pkgOpts, fetchOpts).then(postProcess)
 
   if (pkgOpts.oembed && metadata.oembed) {
-    let oembedData = await fetch(metadata.oembed, fetchOpts)
-      .then(res => res.json())
-
+    let oembedData = await fetch(metadata.oembed, fetchOpts).then(res =>
+      res.json()
+    )
 
     const unwind = get(oembedData, 'body', oembedData)
 
@@ -52,7 +51,6 @@ async function unfurl (url, init = {}) {
         continue
       }
 
-
       metadata.oembed[camelKey] = v
     }
   }
@@ -64,19 +62,21 @@ async function scrape (url, pkgOpts, fetchOpts) {
   let pkg = Object.create(null)
 
   return new Promise(async (resolve, reject) => {
-    let parserStream = new htmlparser2.WritableStream({
-      onopentag,
-      ontext,
-      onclosetag,
-      onerror,
-      onopentagname
-    }, {decodeEntities: true})
+    let parserStream = new htmlparser2.WritableStream(
+      {
+        onopentag,
+        ontext,
+        onclosetag,
+        onerror,
+        onopentagname
+      },
+      { decodeEntities: true }
+    )
 
-    let res = await fetch(url, fetchOpts)
-      .then(res => res.body)
+    let res = await fetch(url, fetchOpts).then(res => res.body)
 
     res.pipe(parserStream)
-  
+
     function onopentagname (tag) {
       debug('<' + tag + '>')
 
@@ -112,11 +112,11 @@ async function scrape (url, pkgOpts, fetchOpts) {
       let target
 
       if (pkgOpts.ogp && ogp.includes(prop)) {
-        target = (pkg.ogp || (pkg.ogp = {}))
+        target = pkg.ogp || (pkg.ogp = {})
       } else if (pkgOpts.twitter && twitter.includes(prop)) {
-        target = (pkg.twitter || (pkg.twitter = {}))
+        target = pkg.twitter || (pkg.twitter = {})
       } else {
-        target = (pkg.other || (pkg.other = {}))
+        target = pkg.other || (pkg.other = {})
       }
 
       rollup(target, prop, val)
@@ -126,7 +126,7 @@ async function scrape (url, pkgOpts, fetchOpts) {
       debug('</' + tag + '>')
 
       this._tagname = ''
-  
+
       if (tag === 'head') {
         res.unpipe(parserStream)
         parserStream.destroy()
@@ -153,7 +153,7 @@ async function scrape (url, pkgOpts, fetchOpts) {
       resolve(pkg)
     })
 
-    res.on('error', (err) => {
+    res.on('error', err => {
       debug('parse error', err.message)
       reject(err)
     })
@@ -172,10 +172,10 @@ function rollup (target, name, val) {
     let prop = !namePart ? 'url' : camelCase(namePart)
     rollupAs = camelCase(rollupAs)
 
-    target = (target[rollupAs] || (target[rollupAs] = [{}]))
+    target = target[rollupAs] || (target[rollupAs] = [{}])
 
     let last = target[target.length - 1]
-    last = (last[prop] ? (target.push({}) && target[target.length - 1]) : last)
+    last = last[prop] ? target.push({}) && target[target.length - 1] : last
     last[prop] = val
 
     return
@@ -186,7 +186,6 @@ function rollup (target, name, val) {
 }
 
 function postProcess (obj) {
-
   let keys = [
     'ogp.ogImage',
     'twitter.twitterImage',
@@ -197,7 +196,7 @@ function postProcess (obj) {
   for (const key of keys) {
     let val = get(obj, key)
     if (!val) continue
-    
+
     val = val.sort((a, b) => a.width - b.width) // asc sort
 
     set(obj, key, val)
