@@ -2256,8 +2256,8 @@ var scrape = function () {
 
                           if (tag === 'head') {
                             res.unpipe(parserStream);
-                            parserStream.destroy();
-                            res.destroy();
+                            parserStream.destroy && parserStream.destroy();
+                            res.destroy && res.destroy();
                             parserStream._parser.reset(); // Parse as little as possible.
                           }
                         };
@@ -2333,8 +2333,8 @@ var scrape = function () {
                           // Abort if content type is not text/html or varient
                           if (!(contentType.indexOf('html') !== -1)) {
                             res.unpipe(parserStream);
-                            parserStream.destroy();
-                            res.destroy();
+                            parserStream.destroy && parserStream.destroy();
+                            res.destroy && res.destroy();
                             parserStream._parser.reset(); // Parse as little as possible.
                             lodash$1(pkg, 'other._type', contentType);
                           }

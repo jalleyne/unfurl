@@ -129,8 +129,8 @@ async function scrape (url, pkgOpts, fetchOpts) {
 
       if (tag === 'head') {
         res.unpipe(parserStream)
-        parserStream.destroy()
-        res.destroy()
+        parserStream.destroy && parserStream.destroy()
+        res.destroy && res.destroy()
         parserStream._parser.reset() // Parse as little as possible.
       }
     }
@@ -141,8 +141,8 @@ async function scrape (url, pkgOpts, fetchOpts) {
       // Abort if content type is not text/html or varient
       if (!contentType.includes('html')) {
         res.unpipe(parserStream)
-        parserStream.destroy()
-        res.destroy()
+        parserStream.destroy && parserStream.destroy()
+        res.destroy && res.destroy()
         parserStream._parser.reset() // Parse as little as possible.
         set(pkg, 'other._type', contentType)
       }
