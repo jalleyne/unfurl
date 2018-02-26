@@ -8,6 +8,9 @@ var lodash$2 = _interopDefault(require('lodash.camelcase'));
 var nodeFetch = _interopDefault(require('node-fetch'));
 var htmlparser2 = _interopDefault(require('htmlparser2'));
 var debug = _interopDefault(require('debug'));
+var _regeneratorRuntime = _interopDefault(require('babel-runtime/regenerator'));
+var _slicedToArray = _interopDefault(require('babel-runtime/helpers/slicedToArray'));
+var _asyncToGenerator = _interopDefault(require('babel-runtime/helpers/asyncToGenerator'));
 
 var ogp = ['og:title', 'og:type', 'og:image', 'og:image:url', 'og:image:secure_url', 'og:image:width', 'og:image:height', 'og:image:type', 'og:url', 'og:audio', 'og:audio:url', 'og:audio:secure_url', 'og:audio:type', 'og:description', 'og:determiner', 'og:locale', 'og:locale:alternate', 'og:site_name', 'og:video', 'og:video:url', 'og:video:secure_url', 'og:video:width', 'og:video:height', 'og:video:type', 'og:video:tag'];
 
@@ -15,80 +18,13 @@ var twitter = ['twitter:url', 'twitter:card', 'twitter:site', 'twitter:site:id',
 
 var oembed = ['type', 'version', 'title', 'author_name', 'author_url', 'provider_name', 'provider_url', 'cache_age', 'thumbnail_url', 'thumbnail_width', 'thumbnail_height', 'url', 'html', 'width', 'height'];
 
-var asyncToGenerator = function (fn) {
-  return function () {
-    var gen = fn.apply(this, arguments);
-    return new Promise(function (resolve, reject) {
-      function step(key, arg) {
-        try {
-          var info = gen[key](arg);
-          var value = info.value;
-        } catch (error) {
-          reject(error);
-          return;
-        }
-
-        if (info.done) {
-          resolve(value);
-        } else {
-          return Promise.resolve(value).then(function (value) {
-            step("next", value);
-          }, function (err) {
-            step("throw", err);
-          });
-        }
-      }
-
-      return step("next");
-    });
-  };
-};
-
-var slicedToArray = function () {
-  function sliceIterator(arr, i) {
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _e = undefined;
-
-    try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-
-        if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"]) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-
-    return _arr;
-  }
-
-  return function (arr, i) {
-    if (Array.isArray(arr)) {
-      return arr;
-    } else if (Symbol.iterator in Object(arr)) {
-      return sliceIterator(arr, i);
-    } else {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance");
-    }
-  };
-}();
-
 var unfurl = function () {
-  var _ref = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(url) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee(url) {
     var init = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
     var pkgOpts, fetchOpts, metadata, oembedData, unwind, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _ref2, _ref3, k, v, camelKey;
 
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+    return _regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
@@ -140,7 +76,7 @@ var unfurl = function () {
             }
 
             _ref2 = _step.value;
-            _ref3 = slicedToArray(_ref2, 2);
+            _ref3 = _slicedToArray(_ref2, 2);
             k = _ref3[0];
             v = _ref3[1];
             camelKey = lodash$2(k);
@@ -212,19 +148,19 @@ var unfurl = function () {
 }();
 
 var scrape = function () {
-  var _ref4 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(url, pkgOpts, fetchOpts) {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee3(url, pkgOpts, fetchOpts) {
     var _this = this;
 
     var pkg;
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+    return _regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
             pkg = Object.create(null);
             return _context3.abrupt('return', new Promise(function () {
-              var _ref5 = asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(resolve, reject) {
+              var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.mark(function _callee2(resolve, reject) {
                 var parserStream, res, onopentagname, onerror, ontext, onopentag, onclosetag;
-                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                return _regeneratorRuntime.wrap(function _callee2$(_context2) {
                   while (1) {
                     switch (_context2.prev = _context2.next) {
                       case 0:
@@ -287,11 +223,11 @@ var scrape = function () {
                         };
 
                         parserStream = new htmlparser2.WritableStream({
-                          onopentag: onopentag,
-                          ontext: ontext,
-                          onclosetag: onclosetag,
-                          onerror: onerror,
-                          onopentagname: onopentagname
+                          onopentag,
+                          ontext,
+                          onclosetag,
+                          onerror,
+                          onopentagname
                         }, { decodeEntities: true });
                         _context2.next = 8;
                         return nodeFetch(url, fetchOpts).then(function (res) {

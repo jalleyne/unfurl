@@ -4,13 +4,11 @@
     "node": ">=8.0.0"
   },
   "version": "2.0.0",
-  "description": "Scraper for oEmbed, Twitter Cards and Open Graph metadata - fast and Promise-based",
+  "description":
+    "Scraper for oEmbed, Twitter Cards and Open Graph metadata - fast and Promise-based",
   "main": "dist/index.js",
   "standard": {
-    "ignore": [
-      "/test/*.js",
-      "/bench/*.js"
-    ]
+    "ignore": ["/test/*.js", "/bench/*.js"]
   },
   "dependencies": {
     "debug": "^3.1.0",
@@ -23,6 +21,8 @@
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "chai": "^3.5.0",
     "chai-as-promised": "^7.0.0",
@@ -42,13 +42,13 @@
     "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-resolve": "^3.0.3",
     "serve": "^6.4.9",
-    "standard": "^10.0.2",
-    "webpack-node-externals": "^1.6.0"
+    "standard": "^10.0.2"
   },
   "scripts": {
     "bench": "DEBUG=bench node --harmony ./bench/index.js",
     "test": "mocha ./test/*.test.js",
-    "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha ./test/*.test.js --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "coveralls":
+      "istanbul cover ./node_modules/mocha/bin/_mocha ./test/*.test.js --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "build:cjs": "rollup index.js -c rollup.config.js"
   },
   "keywords": [
@@ -66,11 +66,7 @@
     "nodejs",
     "fast"
   ],
-  "files": [
-    "README.md",
-    "index.js",
-    "dist/"
-  ],
+  "files": ["README.md", "index.js", "dist/"],
   "repository": "git://github.com/jacktuck/unfurl.git",
   "author": "Jack Tuck",
   "license": "ISC"

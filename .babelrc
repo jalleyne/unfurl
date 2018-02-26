@@ -3,9 +3,21 @@
     [
       "env",
       {
-        "modules": false
+        "modules": false,
+        "targets": {
+          "node": "4.3"
+        }
       }
     ]
   ],
-  "plugins": ["external-helpers"]
+  "plugins": [
+    "external-helpers",
+    [
+      "transform-runtime",
+      {
+        "polyfill": false,
+        "regenerator": true
+      }
+    ]
+  ]
 }
