@@ -4,13 +4,16 @@
     "node": ">=8.0.0"
   },
   "version": "2.0.0",
-  "description":
-    "Scraper for oEmbed, Twitter Cards and Open Graph metadata - fast and Promise-based",
+  "description": "Scraper for oEmbed, Twitter Cards and Open Graph metadata - fast and Promise-based",
   "main": "dist/index.js",
   "standard": {
-    "ignore": ["/test/*.js", "/bench/*.js"]
+    "ignore": [
+      "/test/*.js",
+      "/bench/*.js"
+    ]
   },
   "dependencies": {
+    "babel-runtime": "^6.26.0",
     "debug": "^3.1.0",
     "htmlparser2": "^3.9.2",
     "lodash.camelcase": "^4.3.0",
@@ -47,8 +50,7 @@
   "scripts": {
     "bench": "DEBUG=bench node --harmony ./bench/index.js",
     "test": "mocha ./test/*.test.js",
-    "coveralls":
-      "istanbul cover ./node_modules/mocha/bin/_mocha ./test/*.test.js --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha ./test/*.test.js --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "build:cjs": "rollup index.js -c rollup.config.js"
   },
   "keywords": [
@@ -66,7 +68,11 @@
     "nodejs",
     "fast"
   ],
-  "files": ["README.md", "index.js", "dist/"],
+  "files": [
+    "README.md",
+    "index.js",
+    "dist/"
+  ],
   "repository": "git://github.com/jacktuck/unfurl.git",
   "author": "Jack Tuck",
   "license": "ISC"
